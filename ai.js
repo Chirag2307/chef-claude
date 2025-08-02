@@ -37,10 +37,8 @@ You are an assistant that receives a list of ingredients that a user has and sug
 //     return msg.content[0].text
 // }
 
-// Make sure you set an environment variable in Scrimba 
-// for HF_ACCESS_TOKEN
-// const hf = new HfInference(process.env.HF_ACCESS_TOKEN)
-const hf = new HfInference(import.meta.env.VITE_HF_ACCESS_TOKEN);
+// API keys are handled in the backend only for security
+// No API keys needed in frontend
 
 
 // export async function getRecipeFromMistral(ingredientsArr) {
@@ -86,10 +84,12 @@ const hf = new HfInference(import.meta.env.VITE_HF_ACCESS_TOKEN);
 //         console.error(err);
 //     }
 // }
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export async function getRecipeFromMistral(ingredientsArr) {
     const ingredientsString = ingredientsArr.join(", ");
     try {
-        const response = await fetch("http://localhost:5000/recipe", {
+        const response = await fetch(`${API_URL}/recipe`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ ingredients: ingredientsArr }),
