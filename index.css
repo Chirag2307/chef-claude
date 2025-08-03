@@ -72,54 +72,6 @@ ul.ingredients-list > li {
     line-height: 28px;
 }
 
-.ingredient-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    margin: 4px 0;
-    background: white;
-    border-radius: 6px;
-    border: 1px solid #E5E7EB;
-    transition: all 0.2s ease;
-}
-
-.ingredient-item:hover {
-    border-color: #D1D5DB;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.remove-ingredient-btn {
-    background: #EF4444;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.remove-ingredient-btn:hover {
-    background: #DC2626;
-    transform: scale(1.1);
-}
-
-.empty-ingredients {
-    color: #9CA3AF;
-    font-style: italic;
-    text-align: center;
-    padding: 20px;
-    background: #F9FAFB;
-    border-radius: 8px;
-    border: 2px dashed #E5E7EB;
-}
-
 .get-recipe-container {
     display: flex;
     justify-content: space-between;
