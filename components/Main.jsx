@@ -18,6 +18,9 @@ export default function Main() {
     }, [recipe])
 
     async function getRecipe() {
+        if (ingredients.length === 0) {
+            return // Don't generate recipe if no ingredients
+        }
         setIsLoading(true)
         try {
             const recipeMarkdown = await getRecipeFromAPI(ingredients)
@@ -29,14 +32,25 @@ export default function Main() {
         }
     }
 
-    function addIngredient(formData) {
+    function addIngredient(event) {
+        event.preventDefault()
+        const formData = new FormData(event.target)
         const newIngredient = formData.get("ingredient")
-        setIngredients(prevIngredients => [...prevIngredients, newIngredient])
+        if (newIngredient.trim()) {
+            setIngredients(prevIngredients => [...prevIngredients, newIngredient.trim()])
+            event.target.reset() // Clear the input field
+        }
+    }
+
+    function removeIngredient(ingredientToRemove) {
+        setIngredients(prevIngredients => 
+            prevIngredients.filter(ingredient => ingredient !== ingredientToRemove)
+        )
     }
     
     return (
         <main>
-            <form action={addIngredient} className="add-ingredient-form">
+            <form onSubmit={addIngredient} className="add-ingredient-form">
                 <input
                     type="text"
                     placeholder="e.g. oregano"
@@ -46,14 +60,13 @@ export default function Main() {
                 <button>Add ingredient</button>
             </form>
 
-            {ingredients.length > 0 &&
-                <IngredientsList
-                    ref={recipeSection}
-                    ingredients={ingredients}
-                    getRecipe={getRecipe}
-                    isLoading={isLoading}
-                />
-            }
+            <IngredientsList
+                ref={recipeSection}
+                ingredients={ingredients}
+                getRecipe={getRecipe}
+                isLoading={isLoading}
+                onRemoveIngredient={removeIngredient}
+            />
 
             {isLoading && (
                 <div className="loading-container">
