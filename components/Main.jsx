@@ -4,9 +4,7 @@ import ClaudeRecipe from "./ClaudeRecipe"
 import {getRecipe as getRecipeFromAPI } from "../ai"
 
 export default function Main() {
-    const [ingredients, setIngredients] = React.useState(
-        ["chicken", "all the main spices", "corn", "heavy cream", "pasta"]
-    )
+    const [ingredients, setIngredients] = React.useState([])
     const [recipe, setRecipe] = React.useState("")
     const [isLoading, setIsLoading] = React.useState(false)
     const recipeSection = React.useRef(null)
@@ -29,14 +27,25 @@ export default function Main() {
         }
     }
 
-    function addIngredient(formData) {
+    function addIngredient(e) {
+        e.preventDefault()
+        const formData = new FormData(e.target)
         const newIngredient = formData.get("ingredient")
-        setIngredients(prevIngredients => [...prevIngredients, newIngredient])
+        if (newIngredient.trim()) {
+            setIngredients(prevIngredients => [...prevIngredients, newIngredient.trim()])
+            e.target.reset()
+        }
+    }
+
+    function removeIngredient(ingredientToRemove) {
+        setIngredients(prevIngredients => 
+            prevIngredients.filter(ingredient => ingredient !== ingredientToRemove)
+        )
     }
     
     return (
         <main>
-            <form action={addIngredient} className="add-ingredient-form">
+            <form onSubmit={addIngredient} className="add-ingredient-form">
                 <input
                     type="text"
                     placeholder="e.g. oregano"
@@ -46,14 +55,13 @@ export default function Main() {
                 <button>Add ingredient</button>
             </form>
 
-            {ingredients.length > 0 &&
-                <IngredientsList
-                    ref={recipeSection}
-                    ingredients={ingredients}
-                    getRecipe={getRecipe}
-                    isLoading={isLoading}
-                />
-            }
+            <IngredientsList
+                ref={recipeSection}
+                ingredients={ingredients}
+                getRecipe={getRecipe}
+                removeIngredient={removeIngredient}
+                isLoading={isLoading}
+            />
 
             {isLoading && (
                 <div className="loading-container">
